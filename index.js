@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser")
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 const password = "yjgTvAmGCoqqqErX";
 const uri = "mongodb+srv://mycrudapplication:yjgTvAmGCoqqqErX@cluster0.6vjc7.mongodb.net/crudAppDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -28,6 +29,12 @@ client.connect(err => {
         console.log("data added successfully.");
         res.send("successfull");
       })
+  })
+  app.delete("/delete/:id", (req, res) => {
+    collection.deleteOne({_id: ObjectId(req.params.id)})
+    .then(result => {
+      console.log(result);
+    })
   })
 });
 
