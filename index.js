@@ -22,6 +22,14 @@ client.connect(err => {
       res.send(documents);
     })
   })
+
+  app.get("/product/:id", (req, res) => {
+    collection.find({_id: ObjectId(req.params.id)})
+    .toArray((err, documents) => {
+      res.send(documents[0]);
+    })
+  })
+
   app.post("/addProduct", (req, res) => {
     const product = req.body;
     collection.insertOne(product)
@@ -29,6 +37,15 @@ client.connect(err => {
         console.log("data added successfully.");
         res.send("successfull");
       })
+  })
+  app.patch("/update/:id", (req, res) => {
+    collection.updateOne({_id: ObjectId(req.params.id)},
+    {
+      $set: {price: req.body.price, quantity: req.body.quantity}
+    })
+    .then (result => {
+      console.log(result);
+    })
   })
   app.delete("/delete/:id", (req, res) => {
     collection.deleteOne({_id: ObjectId(req.params.id)})
